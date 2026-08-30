@@ -1,0 +1,14 @@
+{
+  "name": "myra-ai-backend",
+  "version": "1.0.0",
+  "description": "Myra AI Hindi Voice Assistant backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
