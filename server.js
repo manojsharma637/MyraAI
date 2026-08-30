@@ -19,43 +19,17 @@ app.get("/", (req, res) => {
 });
 
 async function generateAnswer(question) {
-  const model = "gemini-2.5-flash";
+  console.log("Sending request to Gemini...");
 
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      console.log(`Trying ${model}, attempt ${attempt}`);
+  const interaction = await ai.interactions.create({
+    model: "gemini-3.6-flash",
+    input: question
+  });
 
-      const response = await ai.models.generateContent({
-        model: model,
-        contents: question,
-        config: {
-          maxOutputTokens: 512
-        }
-      });
+  console.log("Gemini response received.");
 
-      const answer = response.text;
-
-      if (answer && answer.trim()) {
-        return answer.trim();
-      }
-
-      return "Sorry, I could not generate a response.";
-
-    } catch (error) {
-      console.error(
-        `${model} attempt ${attempt} failed:`,
-        error.message
-      );
-
-      if (attempt === 2) {
-        throw error;
-      }
-
-      await new Promise(resolve =>
-        setTimeout(resolve, 3000)
-      );
-    }
-  }
+  return interaction.output_text ||
+    "Sorry, I could not generate a response.";
 }
 
 app.post("/ask", async (req, res) => {
@@ -92,7 +66,5 @@ app.post("/ask", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(
-    `Myra AI server running on port ${PORT}`
-  );
+  console.log(`Myra AI server running on port ${PORT}`);
 });
